@@ -1,0 +1,72 @@
+﻿<Window x:Class="ColorTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:ColorTest"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="HsvColor Test"
+        Width="585"
+        Height="363"
+        mc:Ignorable="d">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+
+    <Viewbox Margin="15">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+
+            <local:HsvPicker x:Name="HsvPicker"
+                             Width="200"
+                             Height="200"
+                             Hue="{Binding Hue}"
+                             Saturation="{Binding Saturation}" />
+
+            <Slider x:Name="HueSlider"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Maximum="360"
+                    Minimum="0"
+                    Value="{Binding Hue}" />
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Hue" TextAlignment="Center" />
+
+            <Slider x:Name="SaturationSlider"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Maximum="1"
+                    Minimum="0"
+                    Orientation="Vertical"
+                    Value="{Binding Saturation}" />
+            <TextBlock Grid.Row="0" Grid.Column="3" Text="Saturation" TextAlignment="Center">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="90" />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+
+            <TextBlock Grid.Row="3" Grid.Column="4" Text="Value" TextAlignment="Center" />
+            <Slider x:Name="ValueSlider"
+                    Grid.Row="2"
+                    Grid.Column="4"
+                    Maximum="1"
+                    Minimum="0"
+                    Value="{Binding Value}" />
+
+            <StackPanel Grid.Row="0" Grid.Column="4" VerticalAlignment="Center">
+                <Rectangle x:Name="PreviewColor" Width="120" Height="120" Fill="{Binding PreviewColor}" />
+                <TextBlock x:Name="TipBlock" Margin="0,10,0,0" Text="{Binding ColorText}" TextAlignment="Center" />
+            </StackPanel>
+        </Grid>
+    </Viewbox>
+</Window>

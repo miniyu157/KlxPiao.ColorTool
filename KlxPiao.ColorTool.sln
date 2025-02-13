@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KlxPiao.ColorTool", "KlxPiao.ColorTool\KlxPiao.ColorTool.csproj", "{4C455D5C-7345-467E-B566-96BE6145908D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorTest", "ColorTest\ColorTest.csproj", "{2144F232-49A5-453E-B0DE-56D01F24BCB1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C455D5C-7345-467E-B566-96BE6145908D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C455D5C-7345-467E-B566-96BE6145908D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C455D5C-7345-467E-B566-96BE6145908D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C455D5C-7345-467E-B566-96BE6145908D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2144F232-49A5-453E-B0DE-56D01F24BCB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2144F232-49A5-453E-B0DE-56D01F24BCB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2144F232-49A5-453E-B0DE-56D01F24BCB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2144F232-49A5-453E-B0DE-56D01F24BCB1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
