@@ -11,11 +11,11 @@ public static class HsvColorExtension
     /// Converts a <see cref="Color"/> to an HSV formatted string.
     /// </summary>
     /// <param name="color">The RGB color to convert.</param>
-    /// <returns>A string in the format "H, S%, V%".</returns>
+    /// <returns>"H, S%, V%, A" where A is the alpha value (0-255).</returns>
     public static string ToHsvString(this Color color)
     {
         var hsv = color.ToHsv();
-        return $"{hsv.Hue}, {hsv.Saturation * 100}%, {hsv.Value * 100}%";
+        return hsv.ToString();
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public static class HsvColorExtension
 
         if (h < 0) h += 360;
 
-        return new HsvColor(h, s, v);
+        return new HsvColor(h, s, v, color.A);
     }
 }
 
@@ -64,6 +64,7 @@ public readonly struct HsvColor
     public readonly float Hue;
     public readonly float Saturation;
     public readonly float Value;
+    public readonly byte Alpha;
 
     /// <summary>
     /// Converts the HSV color to an RGB <see cref="Color"/>.
@@ -90,7 +91,7 @@ public readonly struct HsvColor
         byte g = (byte)((g0 + m) * 255);
         byte b = (byte)((b0 + m) * 255);
 
-        return Color.FromRgb(r, g, b);
+        return Color.FromArgb(Alpha, r, g, b);
     }
 
     /// <summary>
@@ -98,48 +99,74 @@ public readonly struct HsvColor
     /// </summary>
     /// <param name="h">Hue value (0-360 degrees).</param>
     /// <param name="s">Saturation (0-1).</param>
-    /// <param name="v">Value/Brightness (0-1).</param>
-    public HsvColor(float h, float s, float v)
+    /// <param name="v">Value (0-1).</param>
+    /// <param name="a">Alpha (0-255).</param>
+    public HsvColor(float h, float s, float v, byte a = 255)
     {
-        (Hue, Saturation, Value) = ColorParser.ClampValue((h, s, v));
+        (Hue, Saturation, Value, Alpha) = ColorParser.ClampValue((h, s, v, a));
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HsvColor"/> structure.
+    /// </summary>
+    /// <param name="h">Hue value (0-360 degrees).</param>
+    /// <param name="s">Saturation (0-1).</param>
+    /// <param name="v">Value (0-1).</param>
+    /// <param name="a">Alpha value (0-1).</param>
+    public HsvColor(float h, float s, float v, float a)
+    {
+        (Hue, Saturation, Value, Alpha) = ColorParser.ClampValue((h, s, v, (byte)(a * 255)));
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HsvColor"/> structure from a string.
     /// </summary>
-    /// <param name="str">Input string in "H, S%, V%" format.</param>
-    /// <exception cref="ArgumentException">Thrown for invalid input format.</exception>
+    /// <param name="str">Input string in "H, S%, V%" or "H, S%, V%, A" format, where A is the alpha value (0-255).</param>
+    /// <exception cref="FormatException">Thrown when the input string does not have exactly three or four components.</exception>
     public HsvColor(string str)
     {
-        (Hue, Saturation, Value) = ColorParser.ParseString(str);
+        (Hue, Saturation, Value, Alpha) = ColorParser.ParseString(str);
     }
 
     /// <summary>
     /// Creates an HSV color from specified components.
     /// </summary>
-    /// <param name="h">Hue component.</param>
-    /// <param name="s">Saturation component.</param>
-    /// <param name="v">Value component.</param>
-    public static HsvColor FromHsv(float h, float s, float v)
+    /// <param name="h">Hue component (0-360).</param>
+    /// <param name="s">Saturation component (0-1).</param>
+    /// <param name="v">Value component (0-1).</param>
+    /// <param name="a">Alpha component (0-255).</param>
+    public static HsvColor FromHsv(float h, float s, float v, byte a = 255)
     {
-        return new HsvColor(h, s, v);
+        return new HsvColor(h, s, v, a);
+    }
+
+    /// <summary>
+    /// Creates an HSVA color from specified components.
+    /// </summary>
+    /// <param name="h">Hue component (0-360).</param>
+    /// <param name="s">Saturation component (0-1).</param>
+    /// <param name="v">Value component (0-1).</param>
+    /// <param name="a">Alpha component (0-1).</param>
+    public static HsvColor FromHsv(float h, float s, float v, float a)
+    {
+        return new HsvColor(h, s, v, a);
     }
 
     /// <summary>
     /// Creates an HSV color from a formatted string.
     /// </summary>
-    /// <param name="str">Input string in "H, S%, V%" format.</param>
+    /// <param name="str">Input string in "H, S%, V%" or "H, S%, V%, A" format.</param>
     public static HsvColor FromString(string str)
     {
         return new HsvColor(str);
     }
 
     /// <summary>
-    /// Returns a string representation in "H, S%, V%" format.
+    /// "H, S%, V%, A" where A is the alpha value (0-255).
     /// </summary>
     public override readonly string ToString()
     {
-        return $"{Hue}, {Saturation * 100}%, {Value * 100}%";
+        return $"{Hue}, {Saturation * 100}%, {Value * 100}%, {Alpha}";
     }
 
     /// <summary>

@@ -4,69 +4,108 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:ColorTest"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ws="https://schemas.elecho.dev/wpfsuite"
         Title="HsvColor Test"
-        Width="585"
-        Height="363"
+        Width="551"
+        Height="450"
+        FontFamily="Segoe UI Variable Display"
         mc:Ignorable="d">
     <Window.DataContext>
         <local:MainViewModel />
     </Window.DataContext>
 
-    <Viewbox Margin="15">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="5" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="200" />
-            </Grid.ColumnDefinitions>
+    <Window.Resources>
+        <DrawingBrush x:Key="CheckerboardBrush" TileMode="Tile" Viewport="0,0,12,12" ViewportUnits="Absolute">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <GeometryDrawing Brush="#FFD3D3D3">
+                        <GeometryDrawing.Geometry>
+                            <RectangleGeometry Rect="0,0,8,8" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                    <GeometryDrawing Brush="White">
+                        <GeometryDrawing.Geometry>
+                            <GeometryGroup>
+                                <RectangleGeometry Rect="0,0,4,4" />
+                                <RectangleGeometry Rect="4,4,4,4" />
+                            </GeometryGroup>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
 
-            <local:HsvPicker x:Name="HsvPicker"
-                             Width="200"
-                             Height="200"
-                             Hue="{Binding Hue}"
-                             Saturation="{Binding Saturation}" />
+        <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="White" />
+        </Style>
 
-            <Slider x:Name="HueSlider"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Maximum="360"
-                    Minimum="0"
-                    Value="{Binding Hue}" />
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="Hue" TextAlignment="Center" />
+    </Window.Resources>
 
-            <Slider x:Name="SaturationSlider"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    Maximum="1"
-                    Minimum="0"
-                    Orientation="Vertical"
-                    Value="{Binding Saturation}" />
-            <TextBlock Grid.Row="0" Grid.Column="3" Text="Saturation" TextAlignment="Center">
-                <TextBlock.LayoutTransform>
-                    <RotateTransform Angle="90" />
-                </TextBlock.LayoutTransform>
-            </TextBlock>
+    <Viewbox>
+        <ws:Grid Margin="12" RowDefinitions="Auto,12,Auto">
+            <ws:Grid ColumnDefinitions="200,12,350">
+                <ws:StackPanel Spacing="12">
+                    <local:HsvPicker x:Name="HsvPicker"
+                                     Width="Auto"
+                                     Height="{Binding Path=ActualWidth, RelativeSource={RelativeSource Self}}"
+                                     DockPanel.Dock="Top"
+                                     Hue="{Binding Hue}"
+                                     Saturation="{Binding Saturation}" />
 
-            <TextBlock Grid.Row="3" Grid.Column="4" Text="Value" TextAlignment="Center" />
-            <Slider x:Name="ValueSlider"
-                    Grid.Row="2"
-                    Grid.Column="4"
-                    Maximum="1"
-                    Minimum="0"
-                    Value="{Binding Value}" />
+                    <ws:Grid ColumnDefinitions="Auto,12,*" RowDefinitions="Auto,12,Auto,12,Auto,12,Auto">
 
-            <StackPanel Grid.Row="0" Grid.Column="4" VerticalAlignment="Center">
-                <Rectangle x:Name="PreviewColor" Width="120" Height="120" Fill="{Binding PreviewColor}" />
-                <TextBlock x:Name="TipBlock" Margin="0,10,0,0" Text="{Binding ColorText}" TextAlignment="Center" />
-            </StackPanel>
-        </Grid>
+                        <TextBlock Text="Hue" />
+                        <Slider Grid.Column="2" Maximum="359.99" Minimum="0" Value="{Binding Hue}" />
+
+                        <TextBlock Grid.Row="2" Text="Saturation" />
+                        <Slider Grid.Row="2"
+                                Grid.Column="2"
+                                Maximum="1"
+                                Minimum="0"
+                                Value="{Binding Saturation}" />
+
+                        <TextBlock Grid.Row="4" Text="Value" />
+                        <Slider Grid.Row="4"
+                                Grid.Column="2"
+                                Maximum="1"
+                                Minimum="0"
+                                Value="{Binding Value}" />
+
+                        <TextBlock Grid.Row="6" Text="Alpha" />
+                        <Slider Grid.Row="6"
+                                Grid.Column="2"
+                                Maximum="255"
+                                Minimum="0"
+                                Value="{Binding Alpha}" />
+                    </ws:Grid>
+
+                </ws:StackPanel>
+
+                <Grid Grid.Column="2">
+                    <Border Background="{StaticResource CheckerboardBrush}" />
+                    <Border Background="{Binding PreviewBrush}" />
+                </Grid>
+            </ws:Grid>
+
+            <ws:Grid Grid.Row="2" ColumnDefinitions="Auto,12,*,12,50" RowDefinitions="Auto,12,Auto,12,Auto,12">
+                <TextBlock Foreground="Gray" Text="Hex:" />
+                <TextBlock Grid.Column="2" Text="{Binding Hex}" />
+                <Button Grid.Column="4" Command="{Binding CopyHexCommand}" Content="Copy" />
+
+                <TextBlock Grid.Row="2" Foreground="Gray" Text="Hsva:" />
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Hsv}" />
+                <Button Grid.Row="2" Grid.Column="4" Command="{Binding CopyHsvCommand}" Content="Copy" />
+
+                <TextBlock Grid.Row="4" Foreground="Gray" Text="Rgba:" />
+                <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding Rgb}" />
+                <Button Grid.Row="4" Grid.Column="4" Command="{Binding CopyRgbCommand}" Content="Copy" />
+            </ws:Grid>
+        </ws:Grid>
+
+
     </Viewbox>
 </Window>

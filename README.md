@@ -2,6 +2,10 @@
 
 A simple and easy-to-use color space conversion tool that supports mutual conversion between HSL/HSV and RGB color spaces.  
 
+## Preview
+
+![preview](./preview.png)
+
 ## Installation
 
 ```bash  

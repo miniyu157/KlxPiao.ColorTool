@@ -11,11 +11,11 @@ public static class HslColorExtension
     /// Converts a <see cref="Color"/> to an HSL formatted string.
     /// </summary>
     /// <param name="color">The RGB color to convert.</param>
-    /// <returns>A string in the format "H, S%, L%".</returns>
+    /// <returns>"H, S%, L%, A" where A is the alpha value (0-255).</returns>
     public static string ToHslString(this Color color)
     {
         var hsl = color.ToHsl();
-        return $"{hsl.Hue}, {hsl.Saturation * 100}%, {hsl.Lightness * 100}%";
+        return hsl.ToString();
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public static class HslColorExtension
             _ => Δ / (2 - cMax - cMin)
         };
 
-        return new HslColor(h, s, l);
+        return new HslColor(h, s, l, color.A);
     }
 }
 
@@ -65,6 +65,7 @@ public readonly struct HslColor
     public readonly float Hue;
     public readonly float Saturation;
     public readonly float Lightness;
+    public readonly byte Alpha;
 
     /// <summary>
     /// Converts the HSL color to an RGB <see cref="Color"/>.
@@ -91,7 +92,7 @@ public readonly struct HslColor
         byte g = (byte)((g0 + m) * 255);
         byte b = (byte)((b0 + m) * 255);
 
-        return Color.FromRgb(r, g, b);
+        return Color.FromArgb(Alpha, r, g, b);
     }
 
     /// <summary>
@@ -100,47 +101,73 @@ public readonly struct HslColor
     /// <param name="h">Hue value (0-360 degrees).</param>
     /// <param name="s">Saturation (0-1).</param>
     /// <param name="l">Lightness (0-1).</param>
-    public HslColor(float h, float s, float l)
+    /// <param name="a">Alpha (0-255).</param>
+    public HslColor(float h, float s, float l, byte a = 255)
     {
-        (Hue, Saturation, Lightness) = ColorParser.ClampValue((h, s, l));
+        (Hue, Saturation, Lightness, Alpha) = ColorParser.ClampValue((h, s, l, a));
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HslColor"/> structure.
+    /// </summary>
+    /// <param name="h">Hue value (0-360 degrees).</param>
+    /// <param name="s">Saturation (0-1).</param>
+    /// <param name="l">Lightness (0-1).</param>
+    /// <param name="a">Alpha value (0-1).</param>
+    public HslColor(float h, float s, float l, float a)
+    {
+        (Hue, Saturation, Lightness, Alpha) = ColorParser.ClampValue((h, s, l, (byte)(a * 255)));
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HslColor"/> structure from a string.
     /// </summary>
-    /// <param name="str">Input string in "H, S%, L%" format.</param>
-    /// <exception cref="ArgumentException">Thrown for invalid input format.</exception>
+    /// <param name="str">Input string in "H, S%, L%" or "H, S%, L%, A" format, where A is the alpha value (0-255).</param>
+    /// <exception cref="FormatException">Thrown when the input string does not have exactly three or four components.</exception>
     public HslColor(string str)
     {
-        (Hue, Saturation, Lightness) = ColorParser.ParseString(str);
+        (Hue, Saturation, Lightness, Alpha) = ColorParser.ParseString(str);
     }
 
     /// <summary>
     /// Creates an HSL color from specified components.
     /// </summary>
-    /// <param name="h">Hue component.</param>
-    /// <param name="s">Saturation component.</param>
-    /// <param name="l">Lightness component.</param>
-    public static HslColor FromHsl(float h, float s, float l)
+    /// <param name="h">Hue component (0-360).</param>
+    /// <param name="s">Saturation component (0-1).</param>
+    /// <param name="l">Lightness component (0-1).</param>
+    /// <param name="a">Alpha component (0-255).</param>
+    public static HslColor FromHsl(float h, float s, float l, byte a = 255)
     {
-        return new HslColor(h, s, l);
+        return new HslColor(h, s, l, a);
+    }
+
+    /// <summary>
+    /// Creates an HSLA color from specified components.
+    /// </summary>
+    /// <param name="h">Hue component (0-360).</param>
+    /// <param name="s">Saturation component (0-1).</param>
+    /// <param name="l">Lightness component (0-1).</param>
+    /// <param name="a">Alpha component (0-1).</param>
+    public static HslColor FromHsl(float h, float s, float l, float a)
+    {
+        return new HslColor(h, s, l, a);
     }
 
     /// <summary>
     /// Creates an HSL color from a formatted string.
     /// </summary>
-    /// <param name="str">Input string in "H, S%, L%" format.</param>
+    /// <param name="str">Input string in "H, S%, L%" or "H, S%, L%, A" format.</param>
     public static HslColor FromString(string str)
     {
         return new HslColor(str);
     }
 
     /// <summary>
-    /// Returns a string representation in "H, S%, L%" format.
+    /// "H, S%, L%, A" where A is the alpha value (0-255).
     /// </summary>
     public override readonly string ToString()
     {
-        return $"{Hue}, {Saturation * 100}%, {Lightness * 100}%";
+        return $"{Hue}, {Saturation * 100}%, {Lightness * 100}%, {Alpha}";
     }
 
     /// <summary>

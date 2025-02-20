@@ -4,7 +4,7 @@
 		<TargetFramework>net9.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
-		<Version>0.0.3</Version>
+		<Version>0.0.4</Version>
 		<Copyright>Copyright © 2024 miniyu157</Copyright>
 		<PackageProjectUrl>https://github.com/miniyu157/KlxPiao.ColorTool</PackageProjectUrl>
 		<Description>Easy-to-use tool for seamless HSL/HSV and RGB color space conversion.</Description>
