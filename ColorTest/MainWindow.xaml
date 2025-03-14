@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ws="https://schemas.elecho.dev/wpfsuite"
         Title="HsvColor Test"
-        Width="551"
+        Width="530"
         Height="450"
         FontFamily="Segoe UI Variable Display"
         mc:Ignorable="d">
@@ -41,20 +41,15 @@
         <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="White" />
+            <Setter Property="Padding" Value="6,2" />
         </Style>
-
     </Window.Resources>
 
     <Viewbox>
         <ws:Grid Margin="12" RowDefinitions="Auto,12,Auto">
-            <ws:Grid ColumnDefinitions="200,12,350">
+            <ws:Grid ColumnDefinitions="200,12,Auto">
                 <ws:StackPanel Spacing="12">
-                    <local:HsvPicker x:Name="HsvPicker"
-                                     Width="Auto"
-                                     Height="{Binding Path=ActualWidth, RelativeSource={RelativeSource Self}}"
-                                     DockPanel.Dock="Top"
-                                     Hue="{Binding Hue}"
-                                     Saturation="{Binding Saturation}" />
+                    <local:HsvPicker x:Name="HsvPicker" Height="{Binding Path=ActualWidth, RelativeSource={RelativeSource Self}}" Hue="{Binding Hue}" Saturation="{Binding Saturation}" />
 
                     <ws:Grid ColumnDefinitions="Auto,12,*" RowDefinitions="Auto,12,Auto,12,Auto,12,Auto">
 
@@ -85,24 +80,33 @@
 
                 </ws:StackPanel>
 
-                <Grid Grid.Column="2">
+                <Grid Grid.Column="2" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
                     <Border Background="{StaticResource CheckerboardBrush}" />
                     <Border Background="{Binding PreviewBrush}" />
                 </Grid>
             </ws:Grid>
 
-            <ws:Grid Grid.Row="2" ColumnDefinitions="Auto,12,*,12,50" RowDefinitions="Auto,12,Auto,12,Auto,12">
+            <ws:Grid Grid.Row="2" ColumnDefinitions="Auto,12,*,12,Auto" RowDefinitions="Auto,12,Auto,12,Auto,12">
                 <TextBlock Foreground="Gray" Text="Hex:" />
                 <TextBlock Grid.Column="2" Text="{Binding Hex}" />
-                <Button Grid.Column="4" Command="{Binding CopyHexCommand}" Content="Copy" />
+                <ws:UniformGrid Grid.Column="4" HorizontalSpacing="12" Rows="1">
+                    <Button Command="{Binding EditHexCommand}" Content="Edit" />
+                    <Button Command="{Binding CopyHexCommand}" Content="Copy" />
+                </ws:UniformGrid>
 
                 <TextBlock Grid.Row="2" Foreground="Gray" Text="Hsva:" />
                 <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Hsv}" />
-                <Button Grid.Row="2" Grid.Column="4" Command="{Binding CopyHsvCommand}" Content="Copy" />
+                <ws:UniformGrid Grid.Row="2" Grid.Column="4" HorizontalSpacing="12" Rows="1">
+                    <Button Command="{Binding EditHsvCommand}" Content="Edit" />
+                    <Button Command="{Binding CopyHsvCommand}" Content="Copy" />
+                </ws:UniformGrid>
 
                 <TextBlock Grid.Row="4" Foreground="Gray" Text="Rgba:" />
                 <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding Rgb}" />
-                <Button Grid.Row="4" Grid.Column="4" Command="{Binding CopyRgbCommand}" Content="Copy" />
+                <ws:UniformGrid Grid.Row="4" Grid.Column="4" HorizontalSpacing="12" Rows="1">
+                    <Button Command="{Binding EditRgbCommand}" Content="Edit" />
+                    <Button Command="{Binding CopyRgbCommand}" Content="Copy" />
+                </ws:UniformGrid>
             </ws:Grid>
         </ws:Grid>
 
